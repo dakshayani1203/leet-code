@@ -1,0 +1,31 @@
+class Solution {
+    private int height, width;
+    private int res = 0;
+    private static int[][] dir = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    public int largestIsland(int[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        height = grid.length;
+        width = grid[0].length;
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                if(grid[i][j] == 0){ //Assume we change the current node from 0 to 1
+                    res = Math.max(dfs(grid, i, j, new boolean[height][width]), res);
+                }
+            }
+        }
+        return res == 0 ? height * width: res;
+    }
+    private int dfs(int[][] grid, int r, int c, boolean[][] visited){
+        int cur = 1;
+        int tx = 0, ty = 0;
+        visited[r][c] = true;
+        for(int d = 0; d < 4; d++){
+            tx = r + dir[d][0];
+            ty = c + dir[d][1];
+            if(tx >= 0 && tx < height && ty >= 0 && ty < width && grid[tx][ty] == 1 && !visited[tx][ty]){
+                cur += dfs(grid, tx, ty, visited);
+            }
+        }
+        return cur;
+    }
+}
